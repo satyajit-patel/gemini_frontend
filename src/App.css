@@ -30,6 +30,7 @@ button {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
+  margin: 10px; /* Add margin to separate buttons */
 }
 
 button:disabled {
@@ -46,6 +47,12 @@ button:not(:disabled):hover {
   margin-top: 20px;
 }
 
+.responseArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .responseTextarea {
   width: 50%;
   padding: 10px;
@@ -56,4 +63,5 @@ button:not(:disabled):hover {
   resize: none;
   white-space: pre-wrap; /* Ensures text wraps within the container */
   word-wrap: break-word; /* Breaks long words if needed */
+  margin-bottom: 10px; /* Add margin to separate from the stop button */
 }

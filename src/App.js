@@ -8,12 +8,14 @@ function App() {
     const [typedSonnet, setTypedSonnet] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [typingInterval, setTypingInterval] = useState(null);
 
     const handleGenerate = async () => {
         setLoading(true);
         setError(null);
         setSonnet('');
         setTypedSonnet('');
+        clearInterval(typingInterval); // Clear any existing intervals
         try {
             const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/generate-sonnet`, { prompt });
             setSonnet(response.data.sonnet);
@@ -33,9 +35,15 @@ function App() {
                     clearInterval(interval);
                 }
             }, 50); // Adjust typing speed here (50ms per character)
+            setTypingInterval(interval);
             return () => clearInterval(interval);
         }
     }, [sonnet]);
+
+    const handleStop = () => {
+        clearInterval(typingInterval);
+        setTypingInterval(null);
+    };
 
     return (
         <div className="App">
@@ -51,14 +59,19 @@ function App() {
                 {loading ? 'Generating...' : 'Generate Content'}
             </button>
             {error && <p className="error">{error}</p>}
-            <textarea
-                value={typedSonnet}
-                readOnly
-                rows="10"
-                cols="50"
-                placeholder="Generated content will appear here..."
-                className="responseTextarea"
-            ></textarea>
+            <div className="responseArea">
+                <textarea
+                    value={typedSonnet}
+                    readOnly
+                    rows="10"
+                    cols="50"
+                    placeholder="Generated content will appear here..."
+                    className="responseTextarea"
+                ></textarea>
+                <button onClick={handleStop} disabled={!typingInterval}>
+                    Stop
+                </button>
+            </div>
         </div>
     );
 }
